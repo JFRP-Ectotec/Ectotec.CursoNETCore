@@ -24,4 +24,5 @@ public record Error(string Code, string Description)
     /// </summary>
     /// <returns>Objeto Result con los datos del error.</returns>
     public Result ToResult() => Result.Fail($"{Code} - {Description}");
+
 }

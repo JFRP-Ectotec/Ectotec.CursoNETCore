@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Domain.Entities;
 using Domain.Entities.Validators;
+using Domain.Errors;
 using Dumpify;
 
 Torneo torneo = Torneo.Create("2023", "WBC", "World Baseball Classic");
@@ -34,3 +35,6 @@ if (!validacion.IsValid)
     validacion.ToDictionary().Dump();
 }
 
+string mensajeError = Errors.ErrorTorneo.Existente("2023", "maFIFA").Description;
+
+string mensajeError2 = DateTime.UtcNow.ToShortDateString();
