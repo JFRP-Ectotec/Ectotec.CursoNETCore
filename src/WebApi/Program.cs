@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
     ! usado en injección de dependencias.
     ! La razón es que al tratar de realizar las injecciones no están aun definidas las clases
     ! que implementan los repositorios.
+    ! Al final del día es solo usar una de las dos.
     */
 
     // Agregar servicios de Application
