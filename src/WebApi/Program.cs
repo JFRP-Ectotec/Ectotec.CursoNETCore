@@ -1,5 +1,6 @@
 using Application;
 using Serilog;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -20,8 +21,9 @@ var builder = WebApplication.CreateBuilder(args);
     // var assembly = typeof(Program).Assembly;
     // builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
 
-    // builder.Services.AddApplication()
-    // ;
+    builder.Services.AddApplication()
+        .AddInfrastructure()
+    ;
 
     // Registrar Servicio de log.
     builder.Host.UseSerilog((context, services, configuration) => configuration
