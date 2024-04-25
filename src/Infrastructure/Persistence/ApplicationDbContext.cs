@@ -11,4 +11,12 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     /// Conjunto de Torneos en la BD.
     /// </summary>
     public DbSet<Torneo> Torneos { get; set; }
+
+    /// <inheritdoc/>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(ApplicationDbContext).Assembly); /*,
+            WriteConfigurationsFilter*/
+    }
 }

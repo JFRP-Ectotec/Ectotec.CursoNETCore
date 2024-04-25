@@ -1,6 +1,17 @@
 using Application;
-using Serilog;
+using Application.Features.Torneos.Create;
+using Application.Features.Torneos.Get;
+
+using Domain.Entities;
+
+using FluentResults;
+
+using Infrastructure;
+
 using MediatR;
+
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -9,20 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    /*
-    ! IMPORTANTE: Dejar comentarizadas ambas secciones donde se agrega el MediatR para ser
-    ! usado en injección de dependencias.
-    ! La razón es que al tratar de realizar las injecciones no están aun definidas las clases
-    ! que implementan los repositorios.
-    ! Al final del día es solo usar una de las dos.
-    */
-
     // Agregar servicios de Application
-    // var assembly = typeof(Program).Assembly;
-    // builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
-
     builder.Services.AddApplication()
-        .AddInfrastructure()
+        .AddInfrastructure(builder.Configuration)
     ;
 
     // Registrar Servicio de log.
@@ -64,6 +64,31 @@ var app = builder.Build();
         return forecast;
     })
     .WithName("GetWeatherForecast")
+    .WithOpenApi();
+
+    app.MapPost("torneo/", async (CreateTorneoRequest request, ISender sender) =>
+    {
+        Torneo torneo = Torneo.Create(
+            request.Nombre,
+            request.Liga,
+            request.Comentarios ?? string.Empty);
+
+        var command = new CreateTorneoCommand(torneo);
+        Result<Guid> result = await sender.Send(command);
+
+        return result.Value;
+    })
+    .WithName("CreateTorneo")
+    .WithOpenApi();
+
+    app.MapGet("torneo/{id}", async (Guid id, ISender sender) => 
+    {
+        GetTorneoQuery query = new(id);
+        Result<GetTorneoResponse> result = await sender.Send(query);
+
+        return result.Value;
+    })
+    .WithName("GetTorneoWithId")
     .WithOpenApi();
 
     app.Run();
