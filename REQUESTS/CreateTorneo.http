@@ -1,8 +1,8 @@
-POST https://localhost:7070/torneo
+POST https://localhost:7270/torneo
 content-type: application/json
 
 {
-    "nombre": "2022",
+    "nombre": "2018",
     "liga": "FIFA WC",
-    "comentarios": "Che robo"
+    "comentarios": "Komrade Putin"
 }

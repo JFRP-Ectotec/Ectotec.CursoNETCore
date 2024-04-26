@@ -43,9 +43,10 @@ public class TorneoRepository(
         throw new NotImplementedException();
     }
 
-    public Task<Result<Torneo>> Get(Guid id)
+    public async Task<Result<Torneo>> Get(Guid id)
     {
-        throw new NotImplementedException();
+        Torneo? torneo = await dbContext.Torneos.FirstOrDefaultAsync(t => t.Id == id);
+        return torneo;
     }
 
     public Task<Result<ICollection<Torneo>>> GetAll()
