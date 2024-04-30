@@ -13,6 +13,9 @@ using MediatR;
 using Serilog;
 
 using Carter;
+using WebApi.Helpers;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +29,15 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddApplication()
         .AddInfrastructure(builder.Configuration)
     ;
+
+    // Registrar manejo de ProblemDetails.
+    builder.Services.AddProblemDetails();
+
+    // Registrar manejador de excepciones no esperadas.
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+    // Registrar manejo de Health Checks
+    builder.Services.AddHealthChecks();
 
     // Registrar Carter para manejo de minimal APIs.
     builder.Services.AddCarter();
@@ -48,6 +60,11 @@ var app = builder.Build();
     }
 
     app.UseHttpsRedirection();
+
+    app.MapHealthChecks("health", new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    });
 
     app.UseSerilogRequestLogging();
 

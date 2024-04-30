@@ -2,7 +2,7 @@ POST https://localhost:7270/torneo
 content-type: application/json
 
 {
-    "nombre": "2018",
+    "nombre": "2010",
     "liga": "FIFA WC",
-    "comentarios": "Komrade Putin"
+    "comentarios": "Cabeza abajo"
 }

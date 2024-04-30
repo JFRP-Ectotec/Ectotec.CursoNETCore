@@ -20,6 +20,10 @@ public static class DependencyInjection
 
         services.AddRepositories();
 
+        services.AddHealthChecks()
+            .AddMySql(configuration.GetConnectionString("LocalServer"))
+        ;
+
         return services;
     }
 

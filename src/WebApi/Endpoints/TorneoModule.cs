@@ -5,6 +5,7 @@ using MediatR;
 
 using Domain.Entities;
 using FluentResults;
+using WebApi.Helpers;
 
 namespace WebApi.Endpoints;
 
@@ -17,8 +18,8 @@ public class TorneoModule() : CarterModule("torneo")
             .WithOpenApi();
 
         app.MapGet("/{id}", GetTorneo)
-        .WithName("GetTorneoWithId")
-        .WithOpenApi();
+            .WithName("GetTorneoWithId")
+            .WithOpenApi();
     }
 
     private async Task<IResult> CreateTorneo(CreateTorneoRequest request, ISender sender)
@@ -31,7 +32,12 @@ public class TorneoModule() : CarterModule("torneo")
         var command = new CreateTorneoCommand(torneo);
         Result<Guid> result = await sender.Send(command);
 
-        return Results.Ok(result.Value);
+        if (result.IsSuccess)
+        {
+            return Results.Ok(result.Value);
+        }
+
+        return ProblemDetailsHelper.Convierte(result, StatusCodes.Status400BadRequest);
     }
 
     private async Task<IResult> GetTorneo(Guid id, ISender sender)
